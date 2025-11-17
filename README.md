@@ -1,25 +1,23 @@
-# Solostation V3
+# Solostation V4
 
-Solostation with a different twist.
+Solostation Version 4 is a simple, Python and MPV Player driven media player, focusing on old school cable TV.  A random amount of commercials are chosen to play, followed by a randomly selected TV episode or movie (with this pattern repeating indefinitely).  This is not intended on perfeclty mimicking a cable TV channel (see my other Solostation repos) but rather a quick, plug and play approach.
 
-Make sure that you have all of the requirements (requirements.txt) installed via Pip.  Simply run the command below for Solostation to build a schedule and start playback.
+## Requirements
 
-```bash
-venv/bin/python3 main2.py
-```
+Here is my setup.  If you have other hardware or a different OS, you may have different results.
 
-## UPDATE: 11/17/25
+- Raspberry Pi 4B
+- External hard drive (mounted at /media/usb)
 
-Although that Solostation v3 "works", I have created a more simple approach just to have a single channel working with no time tables or rules.  In "simple_schedule.py", you will see that a random amount of commercials are played between each randomly selected movie or episode.  
+## Setup
 
-Below are my notes on how to prepare a Raspberry Pi 4b, making this script plug and play.
-
-## Install DietPi and Update Everything
+### Install DietPi and Update Everything
 
 - No Desktop Environment!
 - Make sure that user 'dietpi' is set to autologin
+- Make sure SSH is installed for remote management
 
-## Create ".env" file and populate
+### Create ".env" file and populate
 
 ```bash
 cp env_example.txt .env
@@ -28,7 +26,7 @@ cp env_example.txt .env
 # Only "USB_ROOT" is needed for 'simple_schedule.py'
 ```
 
-## Create mount folder for USB drive
+### Create mount folder for USB drive
 
 ```bash
 sudo mkdir /media/usb
@@ -36,7 +34,7 @@ sudo mkdir /media/usb
 # Make sure to use this path as "USB_ROOT" in your ENV file
 ```
 
-## Edit FSTAB
+### Edit FSTAB
 
 ```bash
 sudo blkid. # Get UUID of drive
@@ -46,14 +44,14 @@ sudo nano /etc/fstab
 UUID=<UUID_GOES_HERE> /media/usb ext4 noatime,lazytime,rw 0 0
 ```
 
-## Install Argon
+### Install Argon
 
 If you have an Argon v2 case like I do, download and install the script so that the power button has "powers"
 ```bash
 curl https://download.argon40.com/argon1.sh | bash
 ```
 
-## Install Tailscale
+### Install Tailscale (Optional)
 
 ```bash
 # Install Tailscale
@@ -63,20 +61,20 @@ sudo apt install tailscale
 sudo tailscale up
 ```
 
-## Autostart Python Script
+### Autostart Python Script
 
 ```bash
 nano /home/dietpi/.bashrc
 
 # Add at bottom
-[[ -z $DISPLAY && $(tty) == /dev/tty1 ]] && exec /home/dietpi/solostationv3/venv/bin/python3 /home/dietpi/solostationv3/simple_schedule.py
+[[ -z $DISPLAY && $(tty) == /dev/tty1 ]] && exec /home/dietpi/solostationv4/venv/bin/python3 /home/dietpi/solostationv4/simple_schedule.py
 ```
 
-## Reboot!
+### Reboot!
 
 ---
 
-If you followed the steps above correctly, then on reboot, you should have media playing within 30 seconds.  You can use Apple Shortcuts to POST to the Pi IP address over HTTP; see Python script for details.  
+If you followed the steps above correctly, you should have media playing within 30 seconds.  You can use Apple Shortcuts to POST to the Pi IP address over HTTP; see Python script for details.  
 
 ### Example:
 
